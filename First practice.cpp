@@ -11,7 +11,7 @@ struct Man
 
 int main()
 {
-	struct Man S = {"Wilson", 110};//×Ö·û´®ÓÃ""È¦Æğ£¡
+	struct Man S = {"Wilson", 110};//å­—ç¬¦ä¸²ç”¨""åœˆèµ·ï¼
 	struct Man* ps = &S;
 	strcpy(S.name, "Klaus");
 	printf("%s\n", S.name);
@@ -72,14 +72,14 @@ int main()
 ////	//	Max = a;
 ////	//else
 ////	//	Max = b;*/
-////	printf("max = %d\n", max);//¿ØÖÆÌ¨ÏÔÊ¾½á¹û
+////	printf("max = %d\n", max);//æ§åˆ¶å°æ˜¾ç¤ºç»“æœ
 ////	/*int a = 10;
 ////	int b = a++;*/
 ////	/*printf("%d, %d\n", a, b);*/
 ////	/*printf("%d,%d\n", a, b);*/
 ////	////printf(" %d\n", ~a);
 ////	//printf("%d\n", a);
-////	//printf("a=%d\n", a); ¶ººÅÇ°ÃæÊÇÒªÏÔÊ¾³öµÄÎÄ×Ö»òÕßÀàĞÍ¡¢¸ñÊ½£¬ºóÃæÔòÊÇÌáÈ¡µÄÊı¾İ»òÕß½á¹û
+////	//printf("a=%d\n", a); é€—å·å‰é¢æ˜¯è¦æ˜¾ç¤ºå‡ºçš„æ–‡å­—æˆ–è€…ç±»å‹ã€æ ¼å¼ï¼Œåé¢åˆ™æ˜¯æå–çš„æ•°æ®æˆ–è€…ç»“æœ
 ////	
 //	return 0;
 //}
