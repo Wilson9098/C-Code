@@ -13,17 +13,39 @@ void menu()
 
 void game()
 {
+
     //creat a board
 	char board[ROW][COL] = { 0 };
 	//Clear board
 	clear(board);
 	//print board
 	display(board);
+	//play	
+	do
+	{
+		//player
+		playermove(board);
+		display(board);
+		//Win or Lose
+		if (iswin(board) == 0)
+		{
+			break;
+		}
+		//AI
+		computermove(board);
+		display(board);
+		//Win or Lose
+		if (iswin(board) == 0)
+		{
+			break;
+		}
+	} while (iswin(board));
 }
 
 int main()
 {
 	int input = 0;
+	srand((unsigned int)time(NULL));
 	
 	
 	do
