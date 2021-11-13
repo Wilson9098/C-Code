@@ -55,7 +55,7 @@ void Set_mine(char board[row][col],char set)
 }
 
 int get_mine_count(char mine[row][col],int x, int y)
-{
+  {
 	return (mine[x - 1][y - 1] +
 		mine[x][y - 1] +
 		mine[x + 1][y - 1] +
@@ -66,12 +66,66 @@ int get_mine_count(char mine[row][col],int x, int y)
 		mine[x + 1][y + 1]) - 8 * '0';
 }
 
+void judge(char mine[row][col], char show[row][col], int x, int y)
+{
+	if (get_mine_count(mine, x, y) == 0)
+		{
+			show[x][y] = '0';
+			if (x > 0 && y > 0)
+				if (show[x - 1][y - 1] == '*')
+					judge(mine, show, x - 1, y - 1);
+			if (x > 0)
+				if (show[x - 1][y] == '*')
+					judge(mine, show, x - 1, y);
+			if (y > 0)
+				if (show[x][y - 1] == '*')
+					judge(mine, show, x, y - 1);
+			if (x < 10 && y>0)
+				if (show[x + 1][y - 1] == '*')
+					judge(mine, show, x + 1, y - 1);
+			if (x < 10)
+				if (show[x + 1][y] == '*')
+					judge(mine, show, x + 1, y);
+			if (x > 0 && y < 10)
+				if (show[x - 1][y + 1] == '*')
+					judge(mine, show, x - 1, y + 1);
+			if (y < 10)
+				if (show[x][y + 1] == '*')
+					judge(mine, show, x, y + 1);
+			if (x < 10 && y < 10)
+				if (show[x + 1][y + 1] == '*')
+					judge(mine, show, x + 1, y + 1);
+		}
+		else
+		{
+			show[x][y] = get_mine_count(mine, x, y) + '0';
+		}
+}
+
+int num(char show[row][col])
+{
+	int i = 0;
+	int j = 0;
+	int count = 0;
+	for (i = 1; i <= ROW; i++)
+	{
+		for (j = 1; j <= COL; j++)
+		{
+			if (show[i][j] == '*')
+			{
+				count++;
+			}
+		}
+	}
+	return count;
+}
+
 void find_mine(char mine[row][col], char show[row][col])
 {
 	int x = 0;
 	int y = 0;
-	int count = 0;
-	while (count < ROW * COL - Count)
+	int count = ROW * COL;
+	while (count > Count)
 	{
 		printf("Please choose a place: ");
 		scanf("%d%d", &x, &y);
@@ -87,10 +141,11 @@ void find_mine(char mine[row][col], char show[row][col])
 			}
 			else
 			{
-				show[x][y] = get_mine_count(mine, x, y) + '0';
-				count++;
+				judge(mine, show, x, y);
+				count = num(show);
 				printf("\n");
 				display_board(show);
+				
 			}
 
 		}
@@ -99,7 +154,7 @@ void find_mine(char mine[row][col], char show[row][col])
 			printf("Unable, try again\n");
 		}
 	}
-	if (count == ROW * COL - Count)
+	if (count == Count)
 	{
 		printf("Good Job!\n");
 		display_board(mine);

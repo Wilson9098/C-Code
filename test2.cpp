@@ -24,7 +24,7 @@ void Game()
 	display_board(show);
 	//set mine
 	Set_mine(mine,'0'); 
-	/*display_board(mine);*/
+	//display_board(mine);
 	//sweeping
 	find_mine(mine, show);
 
