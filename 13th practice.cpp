@@ -55,6 +55,35 @@ int compare(const void* a, const void* b)
 		return -1;
 }
 
+void Swap(char* a, char* b, int width)
+{
+	int j = 0;
+	for (j = 0; j < width; j++)
+	{
+		char tmp = *a;
+		*a = *b;
+		*b = tmp;
+		a++;
+		b++;
+	}
+}
+
+void Bubble_sort2(void* base, int sz, int width, int(*compare)(const void* a, const void* b))
+{
+	int x = 0;
+	for (x = 0; x < sz - 1; x++)
+	{
+		int y = 0;
+		for (y = 0; y < sz - 1 - x; y++)
+		{
+			if (compare((char*)base+(y*width),(char*)base+((y+1)*width)) > 0)
+			{
+				Swap((char*)base + (y * width), (char*)base + ((y + 1) * width), width);
+			}
+		}
+	}
+}
+
 int main()
 {
 	int arr[] = { 9,7,8,2,1,6,3,10,5,4 };
@@ -62,7 +91,8 @@ int main()
 	int i = 0;
 	int sz = sizeof(arr2) / sizeof(arr2[0]);
 	/*Bubble_sort(arr, sz);*/
-	qsort(arr2, sz, sizeof(arr2[0]), compare);
+	/*qsort(arr2, sz, sizeof(arr2[0]), compare);*/
+	Bubble_sort2(arr2, sz, sizeof(float), compare);
 	for (i = 0; i < sz; i++)
 	{
 		printf("%lf ", arr2[i]);
