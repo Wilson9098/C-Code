@@ -5,25 +5,55 @@
 #include <assert.h>
 
 
-char* my_strcat(char* arr1, const char* arr2)
+int my_strcmp(const char* arr1, const char* arr2)
 {
 	assert(arr1 && arr2);
-	char* ret = arr1;
-	int len1 = strlen(arr1);
-	while (*(arr1++ + len1) = *arr2++)
+	//do
+	//{
+	//	if (*arr1 > *arr2)
+	//		return 1;
+	//	else if (*arr1 < *arr2)
+	//		return -1;
+	//} while (*arr1++ && *arr2++);
+	//return 0;
+	while (*arr1 == *arr2)
 	{
-		;
+		if ('\0' == *arr1)
+			return 0;
+		arr1++;
+		arr2++;
 	}
-	return ret;
+	return *arr1 - *arr2;
 }
 
 int main()
 {
-	char arr1[30] = "hello";
-	char arr2[] = "world";
-	printf("%s", my_strcat(arr1, arr2));
+	char arr1[] = "abzdefb";
+	char arr2[] = "abzdefa";
+	int ret = my_strcmp(arr1, arr2);
+	printf("%d", ret);
 	return 0;
 }
+
+//char* my_strcat(char* arr1, const char* arr2)
+//{
+//	assert(arr1 && arr2);
+//	char* ret = arr1;
+//	int len1 = strlen(arr1);
+//	while (*(arr1++ + len1) = *arr2++)
+//	{
+//		;
+//	}
+//	return ret;
+//}
+//
+//int main()
+//{
+//	char arr1[30] = "hello";
+//	char arr2[] = "world";
+//	printf("%s", my_strcat(arr1, arr2));
+//	return 0;
+//}
 
 //int my_strlen(char* arr)
 //{
