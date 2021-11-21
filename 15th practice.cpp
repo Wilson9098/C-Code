@@ -5,6 +5,41 @@
 #include <assert.h>
 
 
+char* my_strcat(char* arr1, const char* arr2)
+{
+	assert(arr1 && arr2);
+	char* ret = arr1;
+	int len1 = strlen(arr1);
+	while (*(arr1++ + len1) = *arr2++)
+	{
+		;
+	}
+	return ret;
+}
+
+int main()
+{
+	char arr1[30] = "hello";
+	char arr2[] = "world";
+	printf("%s", my_strcat(arr1, arr2));
+	return 0;
+}
+
+//int my_strlen(char* arr)
+//{
+//	if (*arr)
+//		return 1 + my_strlen(arr + 1);
+//	else
+//		return 0;
+//}
+//
+//int main()
+//{
+//	char arr[] = "abcdefgh";
+//	printf("%d", my_strlen(arr));
+//	return 0;
+//}
+
 //int Find_num(int arr[3][3], int k, int row, int col)
 //{
 //	int x = 0;
@@ -25,39 +60,39 @@
 //	return 0;
 //}
 
-int Find_num(int arr[3][3], int k, int* px, int* py)
-{
-	int x = 0;
-	int y = *py - 1;
-	while (x <= *px - 1 && y >= 0)
-	{
-		if (arr[x][y] > k)
-			y--;
-		else if (arr[x][y] < k)
-			x++;
-		else
-		{
-			*px = x;
-			*py = y;
-			return 1;
-		}
-	}
-	return 0;
-}
-
-int main()
-{
-	int arr[3][3] = { {1,2,3},{4,5,6},{7,8,9} };
-	int k = 6;
-	int x = 3;
-	int y = 3;
-	int ret = Find_num(arr, k, &x, &y);
-	if (1 == ret)
-		printf("Find it:%d %d ", x, y);
-	else
-		printf("Can't find it");
-	return 0;
-}
+//int Find_num(int arr[3][3], int k, int* px, int* py)
+//{
+//	int x = 0;
+//	int y = *py - 1;
+//	while (x <= *px - 1 && y >= 0)
+//	{
+//		if (arr[x][y] > k)
+//			y--;
+//		else if (arr[x][y] < k)
+//			x++;
+//		else
+//		{
+//			*px = x;
+//			*py = y;
+//			return 1;
+//		}
+//	}
+//	return 0;
+//}
+//
+//int main()
+//{
+//	int arr[3][3] = { {1,2,3},{4,5,6},{7,8,9} };
+//	int k = 6;
+//	int x = 3;
+//	int y = 3;
+//	int ret = Find_num(arr, k, &x, &y);//return parameter
+//	if (1 == ret)
+//		printf("Find it:%d %d ", x, y);
+//	else
+//		printf("Can't find it");
+//	return 0;
+//}
 
 //int is_move_left(char* arr1, char* arr2)
 //{
