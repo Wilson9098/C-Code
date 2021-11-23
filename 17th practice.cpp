@@ -6,21 +6,76 @@
 #include <ctype.h>
 
 
+struct S
+{
+	char name[20];
+	int age;
+};
+
+void* my_memcpy(void* dest,const void* src, size_t num)
+{
+	assert(dest && src);
+	void* ret = dest;
+	int i = 0;
+	for (i = 0; i < num; i++)
+	{
+		*((char*)dest + i) = *((char*)src + i);
+		//dest = (char*)dest + 1;
+		//src = (char*)src + 1;
+	}
+	return ret;
+}
+
+void* my_memmove(void* dst, const void* src, size_t num)
+{
+	assert(dst && src);
+	void* ret = dst;
+	if (dst > src)
+	{
+		while (num--)
+		{
+			*((char*)dst + num) = *((char*)src + num);
+		}
+	}
+	else
+	{
+		while (num--)
+		{
+			*(char*)dst = *(char*)src;
+			dst = (char*)dst + 1;
+			src = (char*)src + 1;
+		}
+	}
+	return ret;
+}
+
 int main()
 {
-	char arr[] = "WiLSon";
-	char* p = arr;
-	while (*p)
-	{
-		if (islower(*p))
-		{
-			*p = toupper(*p);
-		}
-		p++;
-	}
-	printf("%s", arr);
+	struct S arr1[] = { {"Wilson,28"}, {"Ivy",27}, {"Liam",30} };
+	struct S arr2[3] = { 0 };
+	int arr3[] = { 0,1,2,3,4,5,6,7,8,9,10};
+	int arr4[20] = { 0 };
+	/*memcpy(arr3+2, arr3, 20);*/
+	my_memmove(arr3 + 2, arr3 + 5, 20);//memmove
+	my_memcpy(arr2, arr1, sizeof(arr1));
 	return 0;
 }
+
+//int main()
+//{
+//	char arr[] = "WiLSon";
+//	char* p = arr;
+//	while (*p)
+//	{
+//		if (islower(*p))
+//		{
+//			*p = toupper(*p);
+//		}
+//		p++;
+//	}
+//	printf("%s", arr);
+//	return 0;
+//}
 
 //int main()
 //{
