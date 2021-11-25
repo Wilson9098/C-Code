@@ -3,6 +3,23 @@
 #include "contact.h"
 
 
+ static int find_by_name(const struct contact* p, char* name)
+{
+	int i = 0;
+	for (i = 0; i < p->size; i++)
+	{
+		if (!strcmp(p->data[i].name, name))
+			return i;
+	}
+	return -1;
+}
+
+ static int compare(const void* a, const void* b)
+ {
+	 return strcmp(((struct contact*)a)->data->name,
+		 ((struct contact*)b)->data->name);
+ }
+
 void Initcontact(struct contact* p)
 {
 	assert(p);
@@ -27,7 +44,7 @@ void addinfo(struct contact* p)
 	scanf("%d", &(p->data[p->size].age));
 
 	p->size++;
-	printf("completed\n");
+	printf("Added\n");
 }
 
 void showcontact(const struct contact* p)
@@ -53,5 +70,106 @@ void showcontact(const struct contact* p)
 				p->data[i].sex,
 				p->data[i].age);
 		}
+	}
+}
+
+void delcontact(struct contact* p)
+{
+	assert(p);
+	char name[max_name] = { 0 };
+	if (!(p->size))
+		printf("No contact\n");
+	else
+	{
+		printf("Please input a name: ");
+		scanf("%s", &name);
+		int ret = find_by_name(p, name);
+		if (-1 == ret)
+		{
+			printf("Can't find it\n");
+		}
+		else
+		{
+			//DEL
+			int j = 0;
+			for (j = ret; j < p->size - 1; j++)
+			{
+				p->data[j] = p->data[j + 1];
+			}
+			p->size--;
+			printf("Deleted\n");
+		}
+	}
+	
+}
+
+void search(const struct contact* p)
+{
+	assert(p);
+	char name[max_name] = { 0 };
+	if (!(p->size))
+		printf("No contact\n");
+	else
+	{
+		printf("Please input a name: ");
+		scanf("%s", &name);
+		int ret = find_by_name(p, name);
+		if (-1 == ret)
+			printf("Can't find it\n");
+		else
+		{
+			printf("%-20s\t%-12s\t%-30s\t%-8s\t%-3s\n",
+				"Name",
+				"Number",
+				"Address",
+				"Sex",
+				"Age");
+			printf("%-20s\t%-12s\t%-30s\t%-8s\t%-3d\n",
+				p->data[ret].name,
+				p->data[ret].tele,
+				p->data[ret].address,
+				p->data[ret].sex,
+				p->data[ret].age);
+		}
+	}
+}
+
+void mdfcontact(struct contact* p)
+{
+	assert(p);
+	char name[max_name] = { 0 };
+	if (!(p->size))
+		printf("No contact\n");
+	else
+	{
+		printf("Please input a name: ");
+		scanf("%s", &name);
+		int ret = find_by_name(p, name);
+		if (-1 == ret)
+			printf("Can't find it\n");
+		else
+		{
+			printf("Change name to: ");
+			scanf("%s", p->data[ret].name);
+			printf("Change number to: ");
+			scanf("%s", p->data[ret].tele);
+			printf("Change address tos: ");
+			scanf("%s", p->data[ret].address);
+			printf("Change sex to: ");
+			scanf("%s", p->data[ret].sex);
+			printf("Change age to: ");
+			scanf("%d", &(p->data[ret].age));
+		}
+	}
+}
+
+void sortcontact(struct contact* p)
+{
+	assert(p);
+	if (!(p->size))
+		printf("No contact\n");
+	else
+	{
+		qsort(p, p->size, sizeof(p->data[0]), compare);
 	}
 }

@@ -5,12 +5,12 @@
 
 void menu()
 {
-	printf("###########################\n");
-	printf("#### 1.add       2.del ####\n");
-	printf("#### 3.modify    4.sort ###\n");
-	printf("#### 5.show      0.exit ###\n");
-	printf("###########################\n");
-	printf("###########################\n");
+	printf("##############################\n");
+	printf("#### 1.add       2.del    ####\n");
+	printf("#### 3.modify    4.sort   ####\n");
+	printf("#### 5.show      6.search ####\n");
+	printf("#### 0.exit               ####\n");
+	printf("##############################\n");
 }
 
 int main()
@@ -27,23 +27,29 @@ int main()
 		scanf("%d", &input);
 		switch (input)
 		{
-		case 0:
+		case Exit:
 			printf("Exit");
 			break;
-		case 1:
+		case Add:
 			addinfo(&con);
 			break;
-		case 2:
+		case Del:
+			delcontact(&con);
 			break;
-		case 3:
+		case Modify:
+			mdfcontact(&con);
 			break;
-		case 4:
+		case Sort:
+			sortcontact(&con);
 			break;
-		case 5:
+		case Show:
 			showcontact(&con);
 			break;
+		case Search:
+			search(&con);
+			break;
 		default:
-			printf("Unable, try agagin");
+			printf("Unable, try agagin\n");
 			break;
 		}
 	} while (input);

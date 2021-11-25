@@ -20,12 +20,28 @@ struct contact
 	int size;
 };
 
+enum Option
+{
+	Exit,
+	Add,
+	Del,
+	Modify,
+	Sort,
+	Show,
+	Search
+};
+
 
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include <stdlib.h>
 
 
 void Initcontact(struct contact* p);
 void addinfo(struct contact* p);
 void showcontact(const struct contact* p);
+void delcontact(struct contact* p);
+void search(const struct contact* p);
+void mdfcontact(struct contact* p);
+void sortcontact(struct contact* p);
