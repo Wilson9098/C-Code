@@ -33,6 +33,32 @@ void Initcontact(struct contact** p)
 	}
 	(*p)->capacity = default_size;
 	(*p)->size = 0;
+	Loadcontact(p);
+}
+
+void Loadcontact(struct contact** p)
+{
+	struct info tmp = { 0 };
+	FILE* pfread = fopen("contact.txt", "rb");
+	if (pfread == NULL)
+	{
+		printf("%s\n", strerror(errno));
+		return;
+	}
+
+	while (fread(&tmp, sizeof(struct info),
+		1, pfread))
+	{
+		if ((*p)->size == (*p)->capacity)
+		{
+			Add_capacity(p);
+		}
+		(*p)->data[(*p)->size] = tmp;
+		((*p)->size)++;
+	}
+
+	fclose(pfread);
+	pfread = NULL;
 }
 
 void Add_capacity(struct contact** p)
@@ -208,4 +234,24 @@ void destroycontact(struct contact** p)
 {
 	free(*p);
 	*p = NULL; 
+}
+
+void savecontact(struct contact** p)
+{
+	FILE* pfwrite = fopen("contact.txt", "wb");
+	if (pfwrite == NULL)
+	{
+		printf("%s\n", strerror(errno));
+		return;
+	}
+
+	int i = 0;
+	for (i = 0; i < (*p)->size; i++)
+	{
+			fwrite(&((*p)->data[i]), sizeof(struct info),
+				1, pfwrite);
+	}
+
+	fclose(pfwrite);
+	pfwrite = NULL;
 }
