@@ -50,3 +50,5 @@ void mdfcontact(struct contact** p);
 void sortcontact(struct contact** p);
 void Add_capacity(struct contact** p);
 void destroycontact(struct contact** p);
+void savecontact(struct contact** p);
+void Loadcontact(struct contact** p);
