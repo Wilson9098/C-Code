@@ -9,7 +9,7 @@ void menu()
 	printf("#### 1.add       2.del    ####\n");
 	printf("#### 3.modify    4.sort   ####\n");
 	printf("#### 5.show      6.search ####\n");
-	printf("#### 0.exit               ####\n");
+	printf("#### 7.save      0.exit   ####\n");
 	printf("##############################\n");
 }
 
@@ -28,6 +28,7 @@ int main()
 		switch (input)
 		{
 		case Exit:
+			savecontact(&con);
 			destroycontact(&con);
 			printf("Exit");
 			break;
@@ -48,6 +49,9 @@ int main()
 			break;
 		case Search:
 			search(con);
+			break;
+		case Save:
+			savecontact(&con);
 			break;
 		default:
 			printf("Unable, try agagin\n");
