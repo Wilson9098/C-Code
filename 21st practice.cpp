@@ -8,42 +8,86 @@
 #include <math.h>
 
 
-int find_right_five(int* arr, const int length)
+int find_localmin(int* arr, const int length)
 {
-	int leftindex = 0;
-	int rightindex = length - 1;
-	while (leftindex <= rightindex)
-	{
-		if (arr[(rightindex + leftindex) / 2] <= 5)
-		{
-			if (arr[(rightindex + leftindex) / 2 + 1] <= 5)
-				leftindex = (rightindex + leftindex) / 2 + 1;
-			else
-				break;
-		}
-		else
-		{
-			rightindex = (rightindex + leftindex) / 2 - 1;
-		}
-	}
-	if (arr[(rightindex + leftindex)/2] == 5)
-		return (rightindex + leftindex) / 2;
-	else
+	assert(arr);
+	if (length < 2)
 		return -1;
+	if (arr[0] < arr[1])
+		return 0;
+	else if (arr[length - 1] < arr[length - 2])
+		return length - 1;
+	else
+	{
+		int leftindex = 0;
+		int rightindex = length - 1;
+		while (leftindex <= rightindex)
+		{
+			if ((arr[(leftindex + rightindex) / 2 - 1] > arr[(leftindex + rightindex) / 2]) &&
+				(arr[(leftindex + rightindex) / 2] < arr[(leftindex + rightindex) / 2 + 1]))
+			{
+				return (leftindex + rightindex) / 2;
+			}
+			else if (arr[(leftindex + rightindex) / 2] > arr[(leftindex + rightindex) / 2 + 1])
+			{
+				leftindex = ((leftindex + rightindex) / 2 + 1);
+			}
+			else
+			{
+				rightindex = ((leftindex + rightindex) / 2 - 1);
+			}
+		}
+		
+		return -1;
+
+	}
 }
 
 int main()
 {
-	int arr[] = { 1,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,9 };
+	int arr[] = { 14,13,12,11,10,9,8,7,6,5,4,3,2,1,0,1,2,3,4,5,6,7,8,9 };
 	int length = sizeof(arr) / sizeof(int);
-	int ret = find_right_five(arr, length);
-	if (ret == -1)
-		puts("NO");
-	else
-		printf("the index of left three is: %d", ret);
-
+	int ret = find_localmin(arr,length);
+	printf("%d", ret);
 	return 0;
 }
+
+//int find_right_five(int* arr, const int length)
+//{
+//	int leftindex = 0;
+//	int rightindex = length - 1;
+//	while (leftindex <= rightindex)
+//	{
+//		if (arr[(rightindex + leftindex) / 2] <= 5)
+//		{
+//			if (arr[(rightindex + leftindex) / 2 + 1] <= 5)
+//				leftindex = (rightindex + leftindex) / 2 + 1;
+//			else
+//				break;
+//		}
+//		else
+//		{
+//			rightindex = (rightindex + leftindex) / 2 - 1;
+//		}
+//	}
+//	if (arr[(rightindex + leftindex)/2] == 5)
+//		return (rightindex + leftindex) / 2;
+//	else
+//		return -1;
+//}
+//
+//int main()
+//{
+//	int arr[] = { 1,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,9 };
+//	int length = sizeof(arr) / sizeof(int);
+//	int ret = find_right_five(arr, length);
+//	if (ret == -1)
+//		puts("NO");
+//	else
+//		printf("the index of left three is: %d", ret);
+//
+//	return 0;
+//}
 
 //void insertionsort(int* arr, int length)
 //{
