@@ -12,7 +12,7 @@ void Swap(int* arr, const int a, const int b)
 	arr[b] = tmp;
 }
 
-void HeapInsert(int* arr, int index)
+void MaxHeapInsert(int* arr, int index)
 {
 	while (arr[index] > arr[(index - 1) / 2])
 	{
@@ -21,12 +21,21 @@ void HeapInsert(int* arr, int index)
 	}
 }
 
-void Heapify(int* arr, int index, int R)
+void MinHeapInsert(int* arr, int index)
+{
+	while (arr[index] < arr[(index - 1) / 2])
+	{
+		Swap(arr, index, (index - 1) / 2);
+		index = (index - 1) / 2;
+	}
+}
+
+void MaxHeapify(int* arr, int index, int R)
 {
 	int left = index * 2 + 1;
 	while (left <= R)
 	{
-		int largest = left + 1 < R && arr[left + 1] > arr[left] ?
+		int largest = left + 1 <= R && arr[left + 1] > arr[left] ?
 			left + 1 : left;
 		if(arr[index] < arr[largest])
 		{
@@ -41,7 +50,29 @@ void Heapify(int* arr, int index, int R)
 	}
 }
 
-void HeapSort(int* arr, const int L, const int R)
+
+
+void MinHeapify(int* arr, int index, int R)
+{
+	int left = index * 2 + 1;
+	while (left <= R)
+	{
+		int smallest = left + 1 <= R && arr[left + 1] < arr[left] ?
+			left + 1 : left;
+		if (arr[index] > arr[smallest])
+		{
+			Swap(arr, index, smallest);
+			index = smallest;
+			left = index * 2 + 1;
+		}
+		else
+		{
+			break;
+		}
+	}
+}
+
+void MinHeapSort(int* arr, const int L, const int R)
 {
 	assert(arr);
 	int length = R - L + 1;
@@ -49,31 +80,35 @@ void HeapSort(int* arr, const int L, const int R)
 		return;
 	//Build
 	int i = 0;
-	for (i = 0; i < length; i++)// O(N)
+	for (i = R; i >= 0; i--)
 	{
-		HeapInsert(arr, i);// O(logN)
+		MaxHeapify(arr, i, R);
 	}
-	//Sort
+	//for (i = 0; i < length; i++)// O(N)
+	//{
+	//	MaxHeapInsert(arr, i);// O(logN)
+	//}
 	
+	//Sort
 	int index = R;
 	while (index > 0)
 	{
-		Swap(arr, 0, index);
-		Heapify(arr, 0, --index);
 		
+		Swap(arr, 0, index);
+		MaxHeapify(arr, 0, --index);
 	}
 	
 }
 
-int main()
-{
-	int arr[] = {8,7,8,6,6,7,4,2,0,9,3,4,1,2,6,7,3,9 };
-	int sz = sizeof(arr) / sizeof(int);
-	int i = 0;
-	HeapSort(arr, 0, sz-1);
-	for (i = 0; i < sz; i++)
-	{
-		printf("%d ", arr[i]);
-	}
-	return 0;
-}
+//int main()
+//{
+//	int arr[] = {3,6,0,1,0,2,1,9,8,7,0,7,1,2,3,8,7,5 };
+//	int sz = sizeof(arr) / sizeof(int);
+//	int i = 0;
+//	MinHeapSort(arr, 0, sz-1);
+//	for (i = 0; i < sz; i++)
+//	{
+//		printf("%d ", arr[i]);
+//	}
+//	return 0;
+//}
