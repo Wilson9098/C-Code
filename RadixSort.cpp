@@ -71,13 +71,13 @@ void RadixSort(int* arr, const int L, const int R,int digit)
 	{
 		int i = 0;
 		int j = 0; 
-		memset(count, 0, 4 * (R - L + 1));
+		memset(count, 0, 40);
 		for (i = 0; i <= R; i++)
 		{
 			j = getDigit(arr[i], n);
 			count[j]++;
 		}
-		for (i = 1; i <= R; i++)
+		for (i = 1; i < 10; i++)
 		{
 			count[i] = count[i] + count[i - 1];
 		}
@@ -87,7 +87,7 @@ void RadixSort(int* arr, const int L, const int R,int digit)
 			tmp[(count[j]- 1)] = arr[i];
 			count[j]--;
 		}
-		for (i = 0; i <= R; i++)
+		for (i = 0; i <= R-L; i++)
 		{
 			arr[i] = tmp[i];
 
@@ -95,10 +95,10 @@ void RadixSort(int* arr, const int L, const int R,int digit)
 
 	}
 
-	/*delete[] count;
-	count = NULL;*/
 	delete[] tmp;
+	delete[] count;
 	tmp = NULL;
+	count = NULL;
 	
 }
 
