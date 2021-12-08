@@ -16,8 +16,6 @@ int* Patition(SL* ps, const int L, const int R)
 	int pR = R;
 	/*int ret[2] = { 0 };*/
 
-	/*SLDataType Randomindex = rand() % (ps->size);
-	Swap(ps->n, R, Randomindex);*/
 
 	int i = L;
 	while (i < pR)
@@ -48,11 +46,30 @@ void QuickSort(SL* ps, const int L, const int R)
 	if (L >= R)
 		return;
 	
+	Swap(ps->n, L + rand() % (R - L + 1), R);
 	int* arr = Patition(ps, L, R);
 	QuickSort(ps, L, arr[0]);
 	QuickSort(ps, arr[1], R);
 	
 
+}
+
+int BinaryFind(SL* ps, int L, int R, const SLDataType Data)
+{
+	assert(ps);
+
+	while (L <= R)
+	{
+		int mid = L + ((R - L) >> 2);
+		if (ps->n[mid] > Data)
+			R = mid - 1;
+		else if (ps->n[mid] < Data)
+			L = mid + 1;
+		else
+			return mid;
+	}
+	return -1;
+	
 }
 
 void SeqListCheckCapacity(SL* ps)
@@ -171,4 +188,12 @@ void SeqListSort(SL* ps)
 
 	srand((unsigned)time(NULL));
 	QuickSort(ps,0,(ps->size) - 1);
+}
+
+int SeqListFind(SL* ps, const SLDataType Data)
+{
+	assert(ps);
+
+	SeqListSort(ps);
+	return BinaryFind(ps, 0, (ps->size) - 1, Data);
 }
