@@ -124,3 +124,114 @@ void SingleListPushInsert(SL** pphead, size_t n, const SListDataType NewData)
 		}
 	}
 }
+
+void SingleListEraseInsert(SL** pphead, size_t n)
+{
+	assert(n > 0);
+
+	if (n == 1)
+	{
+		SingleListPopFront(pphead);
+		return;
+	}
+
+	SL* pI = *pphead;
+	SL* prev = NULL;
+	while (--n && pI)
+	{
+		prev = pI;
+		pI = pI->next;
+	}
+
+	if (n)
+	{
+		puts("ERASE FAILED");
+		return;
+	}
+	else
+	{
+		if (!pI)
+		{
+			return;
+		}
+		else if (!(prev->next))
+		{
+			prev = NULL;
+		}
+		else
+		{
+			prev->next = pI->next;
+		}
+	}
+}
+
+void SingleListFind(SL** pphead, size_t n)
+{
+	assert(n > 0);
+
+	SL* pI = *pphead;
+	while (--n && pI)
+	{
+		pI = pI->next;
+	}
+
+	if (n)
+	{
+		puts("Empty");
+	}
+	else
+	{
+		if (!pI)
+		{
+			puts("Empty");
+		}
+		else
+		{
+			printf("Find it: %d\n", pI->Data);
+		}
+	}
+}
+
+void SingleListModify(SL** pphead, size_t n, const SListDataType NewData)
+{
+	assert(n > 0);
+
+	/*if (n == 1)
+	{
+		if (!pphead)
+			SingleListPushFront(pphead, NewData);
+		else
+			(*pphead)->Data = NewData;
+
+		return;
+	}*/
+	if (!*pphead)
+	{
+		BuySLNode(NewData, NULL);
+		return;
+	}
+
+	SL* pI = *pphead;
+	SL* prev = NULL;
+	while (--n && pI)
+	{
+		prev = pI;
+		pI = pI->next;
+	}
+
+	if (n)
+	{
+		puts("MODIFY FAILED");
+	}
+	else
+	{
+		if (!pI)
+		{
+			prev->next = BuySLNode(NewData, NULL);
+		}
+		else
+		{
+			pI->Data = NewData;
+		}
+	}
+}
