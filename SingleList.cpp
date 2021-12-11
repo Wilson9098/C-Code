@@ -146,26 +146,23 @@ void SingleListEraseInsert(SL** pphead, size_t n)
 	if (n)
 	{
 		puts("ERASE FAILED");
-		return;
+		
 	}
 	else
 	{
 		if (!pI)
 		{
-			return;
-		}
-		else if (!(prev->next))
-		{
-			prev = NULL;
+			;
 		}
 		else
 		{
 			prev->next = pI->next;
+			free(pI);
 		}
 	}
 }
 
-void SingleListFind(SL** pphead, size_t n)
+SL* SingleListFind_Num(SL** pphead, size_t n)
 {
 	assert(n > 0);
 
@@ -178,21 +175,23 @@ void SingleListFind(SL** pphead, size_t n)
 	if (n)
 	{
 		puts("Empty");
+		return NULL;
 	}
 	else
 	{
 		if (!pI)
 		{
 			puts("Empty");
+			return NULL;
 		}
 		else
 		{
-			printf("Find it: %d\n", pI->Data);
+			return pI;
 		}
 	}
 }
 
-void SingleListModify(SL** pphead, size_t n, const SListDataType NewData)
+void SingleListModify_Num(SL** pphead, size_t n, const SListDataType NewData)
 {
 	assert(n > 0);
 
@@ -208,7 +207,7 @@ void SingleListModify(SL** pphead, size_t n, const SListDataType NewData)
 	if (!*pphead)
 	{
 		BuySLNode(NewData, NULL);
-		return;
+		return; 
 	}
 
 	SL* pI = *pphead;
@@ -233,5 +232,52 @@ void SingleListModify(SL** pphead, size_t n, const SListDataType NewData)
 		{
 			pI->Data = NewData;
 		}
+	}
+}
+
+SL* SingleListFind_Data(SL** pphead, const SListDataType Data)
+{
+	/*if (!*pphead)
+	{
+		puts("Can't Find it");
+		return NULL;
+	}*/
+	
+	SL* cur = *pphead;
+	while (cur && !(Data == cur->Data))
+	{
+		cur = cur->next;
+	}
+
+	if (!cur)
+	{
+		puts("Can't Find it");
+		return NULL;
+	}
+	
+	return cur;
+}
+
+void SingleListModify_Data(SL** pphead, const SListDataType Data, const SListDataType NewData)
+{
+	/*if (!*pphead)
+	{
+		puts("Can't Find it");
+		return;
+	}*/
+
+	SL* cur = *pphead;
+	while (cur && !(Data == cur->Data))
+	{
+		cur = cur->next;
+	}
+
+	if (!cur)
+	{
+		puts("Can't Find it");
+	}
+	else
+	{
+		cur->Data = NewData;
 	}
 }
