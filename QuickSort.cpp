@@ -10,13 +10,12 @@ void Swap(int* arr, const int a, const int b)
 	arr[b] = tmp;
 }
 
-int* Patition(int* arr, const int L, const int R)
+int* Patition(int* arr, const int L, const int R, int* tmp)
 {
-	assert(arr);
+	assert(arr && tmp);
 
 	int pL = L - 1;
 	int pR = R;
-	int ret[2] = { 0 };
 
 	int i = L;
 	while (i < pR)
@@ -34,9 +33,9 @@ int* Patition(int* arr, const int L, const int R)
 	}
 	Swap(arr, R, pR++);
 
-	ret[0] = pL;
-	ret[1] = pR;
-	return ret;
+	tmp[0] = pL;
+	tmp[1] = pR;
+	return tmp;
 }
 
 void QuickSort(int* arr, const int L, const int R)
@@ -46,9 +45,13 @@ void QuickSort(int* arr, const int L, const int R)
 		return;
 
 	srand((unsigned)time(NULL));
-
-	Swap(arr, L + rand() % (R - L + 1), R);  // L + rand() % num
-	int* tmp = Patition(arr, L, R);
+        Swap(arr, L + rand() % (R - L + 1), R);  // L + rand() % num
+	
+	int* tmp = new int[2];
+	tmp = Patition(arr, L, R, tmp);
 	QuickSort(arr, L, tmp[0]);
 	QuickSort(arr, tmp[1], R);
+	
+	delete[] tmp;
+	tmp = NULL;
 }
