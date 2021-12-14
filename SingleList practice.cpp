@@ -48,7 +48,7 @@ SL* ReverseList1(SL* ps)
 	/*if (!ps || !(ps->next))
 	{
 		return ps;
-	}*/
+	}*/  
 
 	SL* prev = NULL, * cur = ps;
 	while (cur)
@@ -83,5 +83,114 @@ SL* ReverseList2(SL* ps)
 		/*if (next)
 			next = next->next;*/
 	}
+	return newhead;
+}
+
+SL* MidNode(SL* ps)
+{
+	assert(ps);
+
+	SL* fast = ps, * slow = ps;
+
+	while (fast && fast->next)
+	{
+		/*fast = fast->next;
+		if (!fast->next)
+		{
+			slow = slow->next;
+			break;
+		}
+		else
+		{
+			fast = fast->next;
+			slow = slow->next;
+		}*/
+		fast = fast->next->next;
+		slow = slow->next;
+	}
+	return slow;
+}
+
+SL* KNode(SL* ps, int k)
+{
+	assert(ps);
+	if (k < 1)
+		return NULL;
+
+	SL* fast = ps, * slow = ps;
+	
+	while (k--)
+	{
+		if (fast)
+		{
+			fast = fast->next;
+		}
+		else
+			return NULL;
+	}
+
+	/*if (k)
+	{
+		return NULL;
+	}*/
+	while (fast)
+	{
+		fast = fast->next;
+		slow = slow->next;
+	}
+	return slow;
+}
+
+SL* MergeList(SL* phead1, SL* phead2)
+{
+	/*if (!phead1 && !phead2)
+		return NULL;*/
+	if (!phead1)
+		return phead2;
+	if (!phead2)
+		return phead1;
+	
+
+	SL* pnew = NULL, * cur1 = phead1, * cur2 = phead2;
+	if (cur1->Data >= cur2->Data)
+	{
+		pnew = cur1;
+		cur1 = cur1->next;
+	}
+	else
+	{
+		pnew = cur2;
+		cur2 = cur2->next;
+	}
+	SL* newhead = pnew;
+
+	while (cur1 && cur2)
+	{
+		if (cur1->Data <= cur2->Data)
+		{
+			pnew->next = cur1;
+			pnew = pnew->next;
+			cur1 = cur1->next;
+		}
+		else
+		{
+			pnew->next = cur2;
+			pnew = pnew->next;
+			cur2 = cur2->next;
+		}
+	}
+	while (cur1)
+	{
+		pnew->next = cur1;
+		pnew = pnew->next;
+		cur1 = cur1->next;
+	}
+	while (cur2)
+	{
+		pnew->next = cur2;
+		pnew = pnew->next;
+		cur2 = cur2->next;
+	}
+
 	return newhead;
 }
