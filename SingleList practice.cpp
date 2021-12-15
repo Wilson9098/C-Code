@@ -194,3 +194,146 @@ SL* MergeList(SL* phead1, SL* phead2)
 
 	return newhead;
 }
+
+int IsPalindrome(SL* ps)
+{
+	assert(ps);
+
+	SL* fast = ps, * slow = ps;
+	int ret = 1;
+	while (fast && fast->next)
+	{
+		fast = fast->next->next;
+		slow = slow->next;
+	}
+
+	SL* Rhead = slow, * prev = NULL;
+	while (slow)
+	{
+		SL* next = slow->next;
+
+		slow->next = prev;
+		/*if (!next)
+			break;*/
+		prev = slow;
+		slow = next;
+		/*next = next->next;*/
+	}
+
+	SL* Lhead = ps;
+	Rhead = prev;
+
+	while (Lhead && Rhead)
+	{
+		if (Lhead->Data != Rhead->Data)
+		{
+			ret = 0;
+		}
+
+		Lhead = Lhead->next;
+		Rhead = Rhead->next;
+	}
+	/*while (Lhead && Rhead && (Lhead->Data == Rhead->Data))
+	{
+
+		Lhead = Lhead->next;
+		Rhead = Rhead->next;
+	}
+
+	if (!Rhead)
+	{
+		return 1;
+	}*/
+
+	slow = prev;
+	prev = NULL;
+	while (slow)
+	{
+		SL* next = slow->next;
+
+		slow->next = prev;
+		/*if (!next)
+			break;*/
+		prev = slow;
+		slow = next;
+		/*next = next->next;*/
+	}
+	
+	return ret;
+}
+
+
+SL* ListPatition1(SL* ps, int n)
+{
+	assert(ps);
+
+	SL* cur = ps;
+	SL* pLhead = NULL, * pLtail = NULL;
+	SL* pRhead = NULL, * pRtail = NULL;
+	SL* pMhead = NULL, * pMtail = NULL;
+
+	while (cur)
+	{
+		SL* next = cur->next;
+		cur->next = NULL;
+
+		if (cur->Data < n)
+		{
+			if (!pLhead)
+			{
+				pLhead = cur;
+				pLtail = cur;
+			}
+			else
+			{
+				pLtail->next = cur;
+				pLtail = cur;
+			}
+		}
+		else if (cur->Data > n)
+		{
+			if (!pRhead)
+			{
+				pRhead = cur;
+				pRtail = cur;
+			}
+			else
+			{
+				pRtail->next = cur;
+				pRtail = cur;
+			}
+
+		}
+		else
+		{
+			if (!pMhead)
+			{
+				pMhead = cur;
+				pMtail = cur;
+			}
+			else
+			{
+				pMtail->next = cur;
+				pMtail = cur;
+			}
+		}
+
+		cur = next;
+	}
+
+	if (pLhead)
+	{
+		pLtail->next = pMhead ? pMhead : pRhead;
+	}
+	if (pMhead)
+	{
+		pMtail->next = pRhead;
+	}
+
+
+	return pLhead ? pLhead : (pMhead ? pMhead : pRhead);
+}
+
+
+
+
