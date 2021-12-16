@@ -3,6 +3,13 @@
 #include "SingleList practice.h"
 
 
+void Swap(SL** arr, int a, int b)
+{
+	SL* tmp = arr[a];
+	arr[a] = arr[b];
+	arr[b] = tmp;
+}
+
 void Delete_val(SL** ps, SListDataType val)
 {
 	
@@ -333,6 +340,67 @@ SL* ListPatition1(SL* ps, int n)
 
 	return pLhead ? pLhead : (pMhead ? pMhead : pRhead);
 }
+
+SL* ListPatition2(SL* ps, int val)
+{
+	assert(ps);
+
+	int n = 0;
+	SL* cur = ps;
+	while (cur)
+	{
+		n++;
+		cur = cur->next;
+	}
+
+	SL** arr = new SL * [n];
+
+	int i = 0;
+	cur = ps;
+	for (i = 0; i < n; i++)
+	{
+		arr[i] = cur;
+		cur = cur->next;
+		/*arr[i]->next = NULL;*/
+	}
+
+	int pL = -1;
+	int pR = n;
+	i = 0;
+
+	while (i < pR)
+	{
+		if (arr[i]->Data < val)
+		{
+			Swap(arr, i++, ++pL);
+		}
+		else if (arr[i]->Data > val)
+		{
+			Swap(arr, i, --pR);
+		}
+		else
+		{
+			i++;
+		}
+	}
+
+	i = 0;
+	while (i < n-1)
+	{
+		arr[i]->next = arr[i+1];
+		i++;
+	}
+	arr[i]->next = NULL;
+	
+	/*for (i = 1; i < n; i++)
+	{
+		arr[i - 1]->next = arr[i];
+	}
+	arr[i - 1]->next = NULL;*/
+
+	return arr[0];
+}
+
 
 
 
