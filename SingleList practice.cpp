@@ -398,10 +398,146 @@ SL* ListPatition2(SL* ps, int val)
 	}
 	arr[i - 1]->next = NULL;*/
 
+	/*delete[] arr;
+	arr = NULL;*/
+
 	return arr[0];
 }
 
+SL* GetLoopNode(SL* ps)
+{
+	assert(ps);
 
+	SL* fast = ps->next->next;
+	SL* slow = ps->next;
+
+	while (fast != slow)
+	{
+		if (!fast->next || !fast->next->next)
+		{
+			return NULL;
+		}
+
+		fast = fast->next->next;
+		slow = slow->next;
+	}
+
+	fast = ps;
+	while (fast != slow)
+	{
+		fast = fast->next;
+		slow = slow->next;
+	}
+
+	return fast;
+}
+
+SL* noLoop(SL* head1, SL* head2)
+{
+	assert(head1 && head2);
+
+	SL* cur1 = head1, * cur2 = head2;
+	int len1 = 1;
+	int len2 = 1;
+	while (cur1->next)
+	{
+		cur1 = cur1->next;
+		len1++;
+	}
+	
+	while (cur2->next)
+	{
+		cur2 = cur2->next;
+		len2++;
+	}
+
+	if (cur1 == cur2)
+	{
+		int n = len1 < len2 ? len2 - len1 : len1 - len2;
+		cur1 = len1 > len2 ? head1 : head2;
+		cur2 = len1 > len2 ? head2 : head1;
+		while (n--)
+		{
+			cur1 = cur1->next;
+		}
+
+		while (cur1 != cur2)
+		{
+			cur1 = cur1->next;
+			cur2 = cur2->next;
+		}
+		return cur1;
+	}
+	else
+		return NULL;
+}
+
+SL* bothLoop(SL* head1, SL* loop1, SL* head2, SL* loop2)
+{
+	assert(head1 && head2 && loop1 && loop2);
+
+	if (loop1 == loop2)
+	{
+		SL* cur1 = head1, * cur2 = head2;
+		int len1 = 1;
+		int len2 = 1;
+		while (cur1->next == loop1)
+		{
+			cur1 = cur1->next;
+			len1++;
+		}
+
+		while (cur2->next == loop1)
+		{
+			cur2 = cur2->next;
+			len2++;
+		}
+
+		int n = len1 < len2 ? len2 - len1 : len1 - len2;
+		cur1 = len1 > len2 ? head1 : head2;
+		cur2 = len1 > len2 ? head2 : head1;
+		while (n--)
+		{
+			cur1 = cur1->next;
+		}
+
+		while (cur1 != cur2)
+		{
+			cur1 = cur1->next;
+			cur2 = cur2->next;
+		}
+		return cur1;
+	}
+	else
+	{
+		SL* cur = loop1->next;
+		while (cur != loop1)
+		{
+			if (cur == loop2)
+			{
+				return loop2;
+			}
+			cur = cur->next;
+		}
+		return NULL;
+	}
+}
+
+SL* GetIntersect(SL* head1, SL* head2)
+{
+	assert(head1 && head2);
+
+	SL* loop1 = GetLoopNode(head1);
+	SL* loop2 = GetLoopNode(head2);
+
+	if (loop1 && loop2)
+		return bothLoop(head1, loop1, head2, loop2);
+	if (!loop1 && !loop2)
+	{
+		return noLoop(head1, head2);
+	}
+	return NULL;
+}
 
 
 
