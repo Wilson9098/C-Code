@@ -1,6 +1,8 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
 #include "BinaryTree practice.h"
+#include "HashMap.h"
+#include "SqQueen.h"
 
 
 void InitStack(SK* ps)
@@ -173,5 +175,81 @@ void inOrderRecur1(BTree* head)
 	p.base = p.top = NULL;
 }
 
+
+void WidthRecur(BTree* head)
+{
+	assert(head);
+
+	sqQ pQ;
+	InitsqQueen(&pQ);
+
+	EnQueen(&pQ, head);
+	while (IsQueenEmpty(&pQ))
+	{
+		head = PopQueen(&pQ);
+		printf("%d ", head->val);
+		
+		if (head->left)
+		{
+			EnQueen(&pQ, head->left);
+		}
+		if (head->right)
+		{
+			EnQueen(&pQ, head->right);
+		}
+	}
+}
+
+int GetMaxWidth(BTree* head)
+{
+	assert(head);
+
+	int curNodeLevel = 1;
+	int curLevel = 1;
+	int curLevelWidth = 0;
+	int MaxWidth = 0;
+	sqQ pQ;
+	InitsqQueen(&pQ);
+	HMap pHM;
+	InitHashMap(&pHM);
+
+	EnQueen(&pQ, head);
+	HashMapInsert(&pHM, head, curLevel);
+
+	while (IsQueenEmpty(&pQ))
+	{
+		head = PopQueen(&pQ);
+		curNodeLevel = HashMapFind(&pHM, head)->val;
+		/*printf("%d ", head->val);*/
+
+		if (curLevel == curNodeLevel)
+		{
+			curLevelWidth++;
+		}
+		else
+		{
+			curLevel++;
+			if (MaxWidth < curLevelWidth)
+			{
+				MaxWidth = curLevelWidth;
+			}
+			curLevelWidth = 1;
+		}
+
+
+		if (head->left)
+		{
+			EnQueen(&pQ, head->left);
+			HashMapInsert(&pHM, head->left, curLevel + 1);
+		}
+		if (head->right)
+		{
+			EnQueen(&pQ, head->right);
+			HashMapInsert(&pHM, head->right, curLevel + 1);
+		}
+	}
+
+	return MaxWidth;
+}
 
 
