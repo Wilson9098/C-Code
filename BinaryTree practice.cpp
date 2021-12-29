@@ -15,7 +15,7 @@ void InitStack(SK* ps)
 	ps->base = tmp;
 	ps->top = ps->base;
 	ps->stacksize = 2;
-	puts("Intialized");
+	puts("Initialized");
 }
 
 void CheckStack(SK* ps)
@@ -200,56 +200,200 @@ void WidthRecur(BTree* head)
 	}
 }
 
-int GetMaxWidth(BTree* head)
+//int GetMaxWidth(BTree* head)
+//{
+//	assert(head);
+//
+//	int curNodeLevel = 1;
+//	int curLevel = 1;
+//	int curLevelWidth = 0;
+//	int MaxWidth = 0;
+//	sqQ pQ;
+//	InitsqQueen(&pQ);
+//	HMap pHM;
+//	InitHashMap(&pHM);
+//
+//	EnQueen(&pQ, head);
+//	HashMapInsert(&pHM, head, curLevel);
+//
+//	while (IsQueenEmpty(&pQ))
+//	{
+//		head = PopQueen(&pQ);
+//		curNodeLevel = HashMapFind(&pHM, head)->val;
+//		/*printf("%d ", head->val);*/
+//
+//		if (curLevel == curNodeLevel)
+//		{
+//			curLevelWidth++;
+//		}
+//		else
+//		{
+//			curLevel++;
+//			if (MaxWidth < curLevelWidth)
+//			{
+//				MaxWidth = curLevelWidth;
+//			}
+//			curLevelWidth = 1;
+//		}
+//
+//
+//		if (head->left)
+//		{
+//			EnQueen(&pQ, head->left);
+//			HashMapInsert(&pHM, head->left, curLevel + 1);
+//		}
+//		if (head->right)
+//		{
+//			EnQueen(&pQ, head->right);
+//			HashMapInsert(&pHM, head->right, curLevel + 1);
+//		}
+//	}
+//
+//	return MaxWidth;
+//}
+
+int IsCBT(BTree* head)
 {
 	assert(head);
 
-	int curNodeLevel = 1;
-	int curLevel = 1;
-	int curLevelWidth = 0;
-	int MaxWidth = 0;
 	sqQ pQ;
 	InitsqQueen(&pQ);
-	HMap pHM;
-	InitHashMap(&pHM);
+	int leaf = 0;
 
 	EnQueen(&pQ, head);
-	HashMapInsert(&pHM, head, curLevel);
-
 	while (IsQueenEmpty(&pQ))
 	{
 		head = PopQueen(&pQ);
-		curNodeLevel = HashMapFind(&pHM, head)->val;
-		/*printf("%d ", head->val);*/
-
-		if (curLevel == curNodeLevel)
-		{
-			curLevelWidth++;
-		}
-		else
-		{
-			curLevel++;
-			if (MaxWidth < curLevelWidth)
-			{
-				MaxWidth = curLevelWidth;
-			}
-			curLevelWidth = 1;
-		}
-
+		if (head->right && !head->left)
+			return 0;
+		if (leaf && (head->left || head->right))
+			return 0;
 
 		if (head->left)
-		{
 			EnQueen(&pQ, head->left);
-			HashMapInsert(&pHM, head->left, curLevel + 1);
-		}
 		if (head->right)
-		{
 			EnQueen(&pQ, head->right);
-			HashMapInsert(&pHM, head->right, curLevel + 1);
-		}
+		if (!head->left || !head->right)
+			leaf = 1;
 	}
-
-	return MaxWidth;
+	return 1;
 }
 
+int getHeight(BTree* head)
+{
+	if (!head)
+		return 0;
+
+	int leftHeight = getHeight(head->left);
+	int rightHeight = getHeight(head->right);
+
+	return leftHeight > rightHeight ? leftHeight + 1 : rightHeight + 1;
+}
+
+
+int IsBalanced(BTree* head)
+{
+	if (!head)
+		return 1;
+
+	int L = IsBalanced(head->left);
+	int R = IsBalanced(head->right);
+
+	int LHeight = getHeight(head->left);
+	int RHeight = getHeight(head->right);
+
+	if (abs(LHeight - RHeight) > 1)
+		return 0;
+
+	if (!L || !R)
+		return 0;
+	else
+		return 1;
+}
+
+int IsBST(BTree* head)
+{
+	if (!head)
+		return 1;
+
+	int L = IsBST(head->left);
+	int R = IsBST(head->right);
+
+	if (head->left && head->left->val >= head->val)
+		return 0;
+	if (head->right && head->right->val <= head->val)
+		return 0;
+
+	if (!L || !R)
+		return 0;
+	else
+		return 1;
+}
+
+
+void getPrevNode(BTree* head, HMap* pHM)
+{
+	if (!head)
+		return;
+
+	HashMapInsert(pHM, head->left, head);
+	HashMapInsert(pHM, head->right, head);
+
+	getPrevNode(head->left, pHM);
+	getPrevNode(head->right, pHM);
+
+}
+
+BTree* LowestCommonAncestor1(BTree* head, BTree* node1, BTree* node2)
+{
+	if (!head)
+		return NULL;
+
+	HMap pHM;
+	InitHashMap(&pHM);
+	getPrevNode(head, &pHM);
+	HashMapInsert(&pHM, head, NULL);
+
+	while (node1)
+	{
+		BTree* cur = node2;
+		while (cur)
+		{
+			if (cur == node1)
+			{
+				return cur;
+			}
+			cur = HashMapFind(&pHM, cur)->val;
+		}
+		node1 = HashMapFind(&pHM, node1)->val;
+	}
+
+	DestroyHashMap(&pHM);
+	return NULL;
+}
+
+BTree* LowestCommonAncestor2(BTree* head, BTree* node1, BTree* node2)
+{
+	if (!head || head == node1 || head == node2)
+		return head;
+
+	BTree* L = LowestCommonAncestor2(head->left, node1, node2);
+	BTree* R = LowestCommonAncestor2(head->right, node1, node2);
+
+	if (L && R)
+		return head;
+	
+	return L ? L : R;
+}
+
+void PrintAllFolds(int i, int n, int j)
+{
+	if (i > n)
+		return;
+
+	PrintAllFolds(i + 1, n, 1);
+	printf("%d ", j);
+	PrintAllFolds(i + 1, n, 0);
+
+}
 
