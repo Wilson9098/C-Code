@@ -87,6 +87,7 @@ void SeqListCheckCapacity(SQL* ps)
 		ps->n = tmp;
 		ps->capacity *= 2;
 
+
 		puts("Expanded");
 	}
 }
@@ -547,5 +548,125 @@ void DFS(GN* pG)
 
 
 	DestroyStack(&pSK);
+	DestroyHashMap(&pHM);
+}
+
+void ZeroIn(GN* pG, sqQ* ziQ)
+{
+	assert(pG && ziQ);
+
+	sqQ pQ;
+	InitsqQueen(&pQ);
+	EnQueen(&pQ, pG);
+
+	HMap pHM;
+	InitHashMap(&pHM);
+	HashMapInsert(&pHM, pG, pG->val);
+
+	while (IsQueenEmpty(&pQ))
+	{
+		GN* cur = PopQueen(&pQ);
+		if (cur->in == 0)
+		{
+			EnQueen(ziQ, pG);
+		}
+
+		SL* head = cur->nexts;
+		while (head)
+		{
+			if (!HashMapFind(&pHM, head->Data))
+			{
+				EnQueen(&pQ, head->Data);
+				HashMapInsert(&pHM, head->Data, head->Data->val);
+			}
+			head = head->next;
+		}
+	}
+
+
+	DestroyQueen(&pQ);
+	DestroyHashMap(&pHM);
+}
+
+void TopologySort(GN* pG)
+{
+	assert(pG);
+
+	sqQ zeroInQueen;
+	InitsqQueen(&zeroInQueen);
+	ZeroIn(pG, &zeroInQueen);
+
+	while (IsQueenEmpty(&zeroInQueen))
+	{
+		GN* cur = PopQueen(&zeroInQueen);
+		printf("%d ", cur->val);
+
+		SL* head = cur->nexts;
+		while (head)
+		{
+			if (!--(head->Data->in))
+			{
+				EnQueen(&zeroInQueen, head->Data);
+			}
+			head = head->next;
+		}
+	}
+
+	DestroyQueen(&zeroInQueen);
+}
+
+void KruskalMST(HashMap* Graph)
+{
+	assert(Graph);
+
+	int i = 0;
+	int sz = MAP_MAX_SIZE;
+	pQ edges;
+	InitpQueen(&edges);
+
+	HMap pHM;
+	InitHashMap(&pHM);
+
+	int n = Graph->Hashsize;
+	while (n)
+	{
+		for (i = 0; i < sz; i++)
+		{
+			HMNode* cur = Graph->arr[i]->next;
+			while (cur)
+			{
+				int j = 0;
+				while (cur->key->edges->n[j])
+				{
+					EnpQueen(&edges, cur->key->edges->n[j++]);
+				}
+				cur = cur->next;
+				n--;
+			}
+			if (!n)
+				break;
+		}
+	}
+
+
+	GE* edge = PoppQueen(&edges);
+	HashMapInsert(&pHM, edge->from, edge->weight);
+	HashMapInsert(&pHM, edge->to, edge->weight);
+	printf("%d ", edge->weight);
+
+	while (IspQueenEmpty(&edges))
+	{
+		edge = PoppQueen(&edges);
+
+		if (!HashMapFind(&pHM, edge->to))
+		{
+			HashMapInsert(&pHM, edge->to, edge->weight);
+			printf("%d ", edge->weight);
+		}
+		
+	}
+
+
+	DestroypQueen(&edges);
 	DestroyHashMap(&pHM);
 }
