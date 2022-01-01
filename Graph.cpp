@@ -480,6 +480,20 @@ void SingleListModify_Data(SL** pphead, const SListDataType Data, const SListDat
 	}
 }
 
+void DestroySingleList(SL** pphead)
+{
+	if (!*pphead)
+		return;
+
+	while (*pphead)
+	{
+		SL* Next = (*pphead)->next;
+		free(*pphead);
+		(*pphead) = Next;
+	}
+}
+
+
 void BFS(GN* pG)
 {
 	assert(pG);
@@ -669,4 +683,117 @@ void KruskalMST(HashMap* Graph)
 
 	DestroypQueen(&edges);
 	DestroyHashMap(&pHM);
+}
+
+void PrimMST(HashMap* Graph)
+{
+	assert(Graph);
+
+	pQ edges;
+	InitpQueen(&edges);
+
+	HMap nodes;
+	InitHashMap(&nodes);
+
+	int i = 0;
+	int sz = MAP_MAX_SIZE;
+	GN* cur = NULL;
+	for (i = 0; i < sz; i++)
+	{
+		if (!cur)
+		{
+			cur = Graph->arr[i]->next->key;
+			break;
+		}
+	}
+	HashMapInsert(&nodes, cur, cur->val);
+	int j = 0;
+	while (cur->edges->n[j])
+	{
+		EnpQueen(&edges, cur->edges->n[j++]);
+	}
+
+	while (IspQueenEmpty(&edges))
+	{
+		GE* Edge = PoppQueen(&edges);
+		if (!HashMapFind(&nodes, Edge->to))
+		{
+			printf("%d ", Edge->weight);
+			HashMapInsert(&nodes, Edge->to, Edge->to->val);
+			j = 0;
+			while (Edge->to->edges->n[j])
+			{
+				EnpQueen(&edges, Edge->to->edges->n[j++]);
+			}
+		}
+	}
+	
+	
+}
+
+void Dijkstra(GN* head)
+{
+	assert(head);
+
+	/*pQ distances;
+	InitpQueen(&distances);*/
+
+	HMap nodes;
+	InitHashMap(&nodes);
+	HashMapInsert(&nodes, head, 0);
+	
+
+	SL* Existing = NULL;
+	SingleListPushBack(&Existing, head);
+	GN* cur = head;
+
+	while (cur)
+	{
+		GN* mixdistancenode = NULL;
+		int i = 0;
+		int sz = MAP_MAX_SIZE;
+		int mixdistance = 0;
+
+		while (cur->edges->n[i])
+		{
+
+			int distance = HashMapFind(&nodes, cur)->val + cur->edges->n[i]->weight;
+
+			if (!HashMapFind(&nodes, cur->edges->n[i]->to))
+			{
+				/*int distance = HashMapFind(&nodes, cur)->val + cur->edges->n[i]->weight;*/
+				HashMapInsert(&nodes, cur->edges->n[i]->to, distance);
+
+				if (mixdistance == 0 || mixdistance > cur->edges->n[i]->weight)
+				{
+					mixdistance = cur->edges->n[i]->weight;
+					mixdistancenode = cur->edges->n[i]->to;
+				}
+			}
+
+			else if (!SingleListFind_Data(&Existing, cur->edges->n[i]->to))
+			{
+				if (HashMapFind(&nodes, cur->edges->n[i]->to)->val > distance)
+				{
+					HashMapFind(&nodes, cur->edges->n[i]->to)->val = distance;
+				}
+
+				if (mixdistance == 0 || mixdistance > cur->edges->n[i]->weight)
+				{
+					mixdistance = cur->edges->n[i]->weight;
+					mixdistancenode = cur->edges->n[i]->to;
+				}
+			}
+
+			i++;
+		}
+
+		SingleListPushBack(&Existing, cur);
+		cur = mixdistancenode;
+	}
+	
+	
+	PrintHashMap(&nodes);
+	DestroyHashMap(&nodes);
+	DestroySingleList(&Existing);
 }
