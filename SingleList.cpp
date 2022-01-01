@@ -281,3 +281,16 @@ void SingleListModify_Data(SL** pphead, const SListDataType Data, const SListDat
 		cur->Data = NewData;
 	}
 }
+
+void DestroySingleList(SL** pphead)
+{
+	if (!*pphead)
+		return;
+
+	while (*pphead)
+	{
+		SL* Next = (*pphead)->next;
+		free(*pphead);
+		(*pphead) = Next;
+	}
+}
