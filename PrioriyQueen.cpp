@@ -3,17 +3,17 @@
 #include "PrioriyQueen.h"
 
 
-int Compare(QElemtType a, QElemtType b)
+int Compare(pQElemtType a, pQElemtType b)
 {
 	return a - b;
 }
 
-void InitsqQueen(pQ* head)
+void InitpQueen(pQ* head)
 {
 	assert(head);
 
-	head->Maxsize = 1000;
-	QElemtType* tmp = (QElemtType*)malloc(head->Maxsize * sizeof(QElemtType));
+	head->Maxsize = 2;
+	pQElemtType* tmp = (pQElemtType*)malloc(head->Maxsize * sizeof(pQElemtType));
 	if (!tmp)
 		return;
 
@@ -22,39 +22,39 @@ void InitsqQueen(pQ* head)
 	puts("Initialized");
 }
 
-//void CheckQueen(pQ* head)
-//{
-//	assert(head);
-//
-//	if ((head->rear + 1) % head->Maxsize == head->front)
-//	{
-//		QElemtType* tmp = (QElemtType*)malloc(2 * head->Maxsize * sizeof(QElemtType));
-//		if (!tmp)
-//			return;
-//
-//
-//		int i = 0;
-//		while (head->front != head->rear)
-//		{
-//			tmp[i++] = head->base[head->front];
-//			head->front = (head->front + 1) % head->Maxsize;
-//		}
-//
-//		free(head->base);
-//		head->base = tmp;
-//		head->Maxsize *= 2;
-//		head->front = 0;
-//		head->rear = i;
-//
-//		puts("Expanded");
-//	}
-//}
-
-void EnQueen(pQ* head, QElemtType val)
+void CheckpQueen(pQ* head)
 {
 	assert(head);
-	/*CheckQueen(head);*/
 
+	if ((head->rear + 1) % head->Maxsize == head->front)
+	{
+		pQElemtType* tmp = (pQElemtType*)malloc(2 * head->Maxsize * sizeof(pQElemtType));
+		if (!tmp)
+			return;
+
+
+		int i = 0;
+		while (head->front != head->rear)
+		{
+			tmp[i++] = head->base[head->front];
+			head->front = (head->front + 1) % head->Maxsize;
+		}
+
+		free(head->base);
+		head->base = tmp;
+		head->Maxsize *= 2;
+		head->front = 0;
+		head->rear = i;
+
+		puts("Expanded");
+	}
+}
+
+void EnpQueen(pQ* head, pQElemtType val)
+{
+	assert(head);
+	CheckpQueen(head);
+	
 	int i = head->rear;
 	while (i>=head->front && Compare(val, head->base[(i-1)/2]) < 0)
 	{
@@ -66,7 +66,7 @@ void EnQueen(pQ* head, QElemtType val)
 	head->rear = (head->rear + 1) % head->Maxsize;
 }
 
-//void DeQueen(pQ* head)
+//void DepQueen(pQ* head)
 //{
 //	assert(head);
 //	if (head->front == head->rear)
@@ -75,14 +75,14 @@ void EnQueen(pQ* head, QElemtType val)
 //	head->front = (head->front + 1) % head->Maxsize;
 //}
 
-int QueenLength(pQ* head)
+int pQueenLength(pQ* head)
 {
 	assert(head);
 
 	return (head->rear - head->front + head->Maxsize) % head->Maxsize;
 }
 
-void DestroyQueen(pQ* head)
+void DestroypQueen(pQ* head)
 {
 	assert(head);
 
@@ -90,7 +90,7 @@ void DestroyQueen(pQ* head)
 	head = NULL;
 }
 
-pQ* IsQueenEmpty(pQ* head)
+pQ* IspQueenEmpty(pQ* head)
 {
 	assert(head);
 
@@ -100,13 +100,13 @@ pQ* IsQueenEmpty(pQ* head)
 		return head;
 }
 
-QElemtType PopQueen(pQ* head)
+pQElemtType PoppQueen(pQ* head)
 {
 	assert(head);
 	if (head->front == head->rear)
 		return NULL;
 
-	QElemtType ret = head->base[head->front];
+	pQElemtType ret = head->base[head->front];
 	head->base[head->front] = head->base[head->rear - 1];
 
 	int start = head->front;
@@ -117,7 +117,7 @@ QElemtType PopQueen(pQ* head)
 
 		if (Compare(head->base[start], head->base[max]) > 0)
 		{
-			QElemtType tmp = head->base[start];
+			pQElemtType tmp = head->base[start];
 			head->base[start] = head->base[max];
 			head->base[max] = tmp;
 
@@ -131,4 +131,73 @@ QElemtType PopQueen(pQ* head)
 	head->rear = (head->rear - 1) % head->Maxsize;
 
 	return ret;
+}
+
+int pQueenFind(pQ* head, pQElemtType val)
+{
+	assert(head);
+
+	int i = head->front;
+	
+	while (i <= head->rear)
+	{
+		if (Compare(val, head->base[i]))
+			i++;
+		else
+			return i;
+	}
+	/*while (L <= R)
+	{
+		int mid = L + ((R - L) >> 1);
+
+		if (Compare(val, head->base[mid] < 0))
+		{
+			R = mid - 1;
+		}
+		else if (Compare(val, head->base[mid] > 0))
+		{
+			L = mid + 1;
+		}
+		else
+			return 1;
+	}*/
+	return -1;
+}
+
+void pQueenModify(pQ* head, pQElemtType val, pQElemtType newval)
+{
+	assert(head);
+
+	int i = pQueenFind(head, val);
+	head->base[i] = newval;
+
+	if (Compare(val, newval) > 0)
+	{
+		while (i >= head->front && newval < head->base[(i - 1) >> 1])
+		{
+			head->base[i] = head->base[(i - 1) >> 1];
+			head->base[(i - 1) >> 1] = newval;
+			i = (i - 1) >> 1;
+		}
+	}
+	else if (Compare(val, newval) < 0)
+	{
+		int start = i;
+		int left = 2 * start + 1;
+
+		while (left <= head->rear)
+		{
+			int min = left + 1 <= head->rear && head->base[left + 1] < head->base[left] ? left + 1 : left;
+
+			if (newval > head->base[min])
+			{
+				head->base[start] = head->base[min];
+				head->base[min] = newval;
+				start = min;
+				left = 2 * start + 1;
+			}
+			else
+				break;
+		}
+	}
 }
