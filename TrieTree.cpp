@@ -83,18 +83,36 @@ void TrieTreeDelete(TTNode* root, const char* string)
 		return;
 
 	TTNode* cur = root;
-	cur->P--;
+	root->P--;
+	
 	int i = 0;
+
 	while (string[i])
 	{
-		int p = string[i++] - 'a';
-		TTNode* Next = cur->nexts[p];
-
+		int p = string[i] - 'a';
 		cur->nexts[p]->P--;
+		
 		if (!cur->nexts[p]->P)
 		{
-			cur->nexts[p] = NULL;
+			while (string[i])
+			{
+				p = string[i++] - 'a';
+				TTNode* Next = cur->nexts[p];
+
+				cur->nexts[p] = NULL;
+				if (cur != root)
+				{
+					delete[] cur->nexts;
+					delete cur;
+				}
+				cur = Next;
+			}
+			delete[] cur->nexts;
+			delete cur;
+			return;
 		}
 		cur = cur->nexts[p];
+		i++;
 	}
+	cur->E--;
 }
