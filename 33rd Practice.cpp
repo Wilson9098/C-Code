@@ -200,7 +200,7 @@ void HeapInsert(int* arr, const int L, int i)
 	if (L >= i)
 		return;
 
-	while (arr[i] > arr[(i - 1) >> 1])
+	while (arr[i] > arr[(i - 1) >> 1] && i > 0)
 	{
 		Swap(arr, i, (i - 1) >> 1);
 		i = (i - 1) >> 1;
